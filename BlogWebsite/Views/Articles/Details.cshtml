@@ -1,0 +1,111 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Bài viết";
+    // Get the current page URL dynamically
+    var currentUrl = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}";
+}
+@using System.Net
+@using System.Web
+
+@model NewsWebsite.Models.Article
+
+<!-- Single Product Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <ol class="breadcrumb justify-content-start mb-4">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a href="#">Thông tin về viện</a></li>
+            <li class="breadcrumb-item active text-dark text-ellipsis-1">@Model.Title</li>
+        </ol>
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="mb-4">
+                    <div class="h1 display-5">@Model.Title</div>
+                </div>
+                <div class="position-relative rounded overflow-hidden mb-3">
+                    <img src="~/img/articles/@Model.Thumbnail" class="img-zoomin img-fluid rounded w-100" alt="" style="aspect-ratio: 6 / 4; object-fit: cover">
+                    <div class="position-absolute text-white px-4 py-2 bg-primary rounded" style="top: 20px; right: 20px;">
+                        @Model.Category.Name
+                    </div>
+                </div>
+                <div class="d-flex justify-content-start gap-2">
+                    <div class="text-dark me-3"><i class="fa fa-eye"></i> @Model.Views Lượt xem</div>
+                    <div class="text-dark me-3"><i class="fas fa-at"></i> @Model.Account.DisplayName</div>
+                    <div class="text-dark me-3"><i class="fas fa-calendar-alt"></i> @Model.Date.ToString("dd/MM/yyyy")</div>
+                </div>
+                @Html.Raw(Model.Htext)
+                <div class="tab-class">
+                    <div class="d-flex justify-content-between border-bottom my-4 pb-3 align-items-center">
+                        <ul class="nav nav-pills d-inline-flex text-center align-items-center">
+                            <li class="nav-item">
+                                <h5 class="mt-2 me-3 mb-0">Thẻ:</h5>
+                            </li>
+
+                            @foreach (var tag in Model.Tags)
+                            {
+                                <li class="nav-item">
+                                    <div class="d-flex py-2 px-3 bg-light rounded-pill me-2" data-bs-toggle="pill">
+                                        <span class="text-dark" style="width: fit-content;">@tag.Name</span>
+                                    </div>
+                                </li>
+                            }
+
+                        </ul>
+                        <div class="d-flex align-items-center">
+                            <h5 class="mb-0 me-3">Chia sẻ:</h5>
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={@WebUtility.UrlEncode(currentUrl)}">
+                                <i class="fab fa-facebook-f link-hover btn btn-square rounded-circle border-primary text-dark me-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-light rounded my-4 p-4">
+                    <h4 class="mb-4">Tin đề xuất</h4>
+                    <div class="row g-4">
+                        @await Component.InvokeAsync("RecommendedArticles",Model.CategoryId)
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-4">
+                <div class="row g-4">
+                    <div class="col-12">
+                        <div class="p-3 rounded border">
+                            <div class="input-group w-100 mx-auto d-flex mb-4">
+                                <input type="search" class="form-control p-3" placeholder="Nhập từ khóa" aria-describedby="search-icon-1">
+                                <span id="search-icon-1" class="btn btn-primary input-group-text p-3"><i class="fa fa-search text-white"></i></span>
+                            </div>
+                            <h4 class="mb-4">Danh mục khác</h4>
+                            <div class="row g-2">
+                                @await Component.InvokeAsync("CategoryList")
+                            </div>
+                            <h4 class="my-4">Các trang thông tin khác</h4>
+                            <div class="row g-4">
+                                <div class="col-12">
+                                    <a href="https://www.facebook.com/vienyduochocdantoc" target="_blank" class="w-100 rounded btn btn-primary d-flex align-items-center p-3 mb-2">
+                                        <i class="fab fa-facebook-f btn btn-light btn-square rounded-circle me-3"></i>
+                                        <span class="text-white">Facebook</span>
+                                    </a>
+                                    <a href="https://www.youtube.com/@@vienyduochocdantoc273" target="_blank" class="w-100 rounded btn btn-danger d-flex align-items-center p-3 mb-2">
+                                        <i class="fab fa-youtube btn btn-light btn-square rounded-circle me-3"></i>
+                                        <span class="text-white">Youtube</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <h4 class="my-4">Tin nổi bật</h4>
+                            <div class="row g-4">
+                                @await Component.InvokeAsync("ArticleSidebar")
+                                <div class="col-lg-12">
+                                    <a asp-controller="Articles" asp-action="Trending" class="link-hover btn border border-primary rounded-pill text-dark w-100 py-3 mb-4">Xem thêm</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Single Product End -->

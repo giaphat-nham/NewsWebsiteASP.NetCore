@@ -1,0 +1,25 @@
+﻿@model IEnumerable<NewsWebsite.ViewModels.ArticleSidebarVM>
+
+@foreach (var item in Model)
+{
+    <div class="col-12">
+        <div class="row g-4 align-items-center features-item">
+            <div class="col-4">
+                <div class="rounded-circle position-relative">
+                    <div class="overflow-hidden rounded-circle">
+                        <img src="~/img/articles/@item.Image" class="img-zoomin img-fluid rounded-circle w-100" alt="" style="aspect-ratio: 1 / 1; object-fit: cover">
+                    </div>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="features-content d-flex flex-column">
+                    <p class="text-uppercase mb-2">@item.CategoryName</p>
+                    <a asp-controller="Articles" asp-action="Details" asp-route-id=@item.Id class="h6 text-ellipsis-2">
+                        @item.Title
+                    </a>
+                    <small class="text-body d-block"><i class="fas fa-calendar-alt me-1"></i>@item.Date.ToString("dd/MM/yyyy")</small>
+                </div>
+            </div>
+        </div>
+    </div>
+}

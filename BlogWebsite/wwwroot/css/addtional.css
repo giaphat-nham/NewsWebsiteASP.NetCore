@@ -1,0 +1,30 @@
+﻿.text-ellipsis-1 {
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    line-clamp: 1;
+    -webkit-line-clamp: 1;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical;
+}
+
+.text-ellipsis-2 {
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical;
+}
+
+.text-ellipsis-3 {
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical;
+}
+
+.text-justify {
+    text-align: justify !important;
+}

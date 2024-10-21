@@ -1,0 +1,27 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model IEnumerable<NewsWebsite.ViewModels.HomeArticleVM>
+
+<div class="latest-news-carousel owl-carousel">
+
+    @foreach (var article in Model)
+    {
+        @* Post start *@
+        <div class="latest-news-item">
+            <div class="bg-light rounded">
+                <div class="rounded-top overflow-hidden">
+                    <a asp-controller="Articles" asp-action="Details" asp-route-id=@article.Id><img src="~/img/articles/@article.Thumbnail" class="img-zoomin img-fluid rounded-top w-100" alt="" style="aspect-ratio: 3 / 2; object-fit: cover"></a>
+                </div>
+                <div class="d-flex flex-column p-4">
+                    <a asp-controller="Articles" asp-action="Details" asp-route-id=@article.Id class="h4 text-ellipsis-2">@article.Title</a>
+                    <div class="d-flex justify-content-between">
+                        <small class="text-body d-block"><i class="fas fa-calendar-alt me-1"></i>  @article.Date.ToString("dd/MM/yyyy")</small>
+                        <div class="small text-body"><i class="fa fa-eye"></i> @article.Views</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @* Post end *@
+    }
+</div>

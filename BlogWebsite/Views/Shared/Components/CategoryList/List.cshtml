@@ -1,0 +1,10 @@
+﻿@model IEnumerable<NewsWebsite.ViewModels.CategoryListVM>
+
+@foreach (var item in Model)
+{
+    <div class="col-12">
+        <a asp-controller="Articles" asp-action="Articles" asp-route-id=@item.Id class="link-hover btn btn-light w-100 rounded text-uppercase text-dark py-3">
+            @item.Name
+        </a>
+    </div>
+}

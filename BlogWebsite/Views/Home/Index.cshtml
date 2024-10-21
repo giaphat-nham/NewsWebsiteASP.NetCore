@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Trang chủ";
+}
+
+<!-- Main Post Section Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="row g-4">
+            <div class="col-lg-7 col-xl-8 mt-0">
+                @* Main post start*@
+                @await Component.InvokeAsync("MainBanner")
+                @* Main post start *@
+
+                @* Top post start *@
+                <div class="bg-light p-4 rounded">
+                    <div class="news-2">
+                        <h3 class="mb-4">Được quan tâm</h3>
+                        @await Component.InvokeAsync("TopArticle")
+                    </div>
+                    
+                </div>
+                @* Top post end *@
+            </div>
+            <div class="col-lg-5 col-xl-4">
+                <div class="bg-light rounded p-4 pt-0">
+                    <div class="row g-4">
+                        @await Component.InvokeAsync("HomeSidebar")      
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Main Post Section End -->
+
+<!-- Top News Start -->
+<div class="container-fluid latest-news py-5">
+    <div class="container py-5">
+        <h2 class="mb-4">Tin nổi bật</h2>
+        @await Component.InvokeAsync("ArticleCarousel")
+    </div>
+</div>
+<!-- Top News End -->
