@@ -11,7 +11,7 @@
 </div>
 <div class="col-12">
     <div class="d-flex flex-column">
-        <a href="#" class="h4 mb-2 text-ellipsis-2">@Model.First().Title</a>
+        <a asp-controller="Articles" asp-action="Details" asp-route-id=@Model.First().Id class="h4 mb-2 text-ellipsis-2">@Model.First().Title</a>
         <p class="fs-5 mb-0"><i class="fa fa-eye"> @Model.First().Views Lượt xem</i></p>
         <p class="fs-5 mb-0"><i class="fas fa-calendar-alt">  @Model.First().Date.ToString("dd/MM/yyyy")</i></p>
     </div>
@@ -30,7 +30,7 @@
             </div>
             <div class="col-7">
                 <div class="features-content d-flex flex-column">
-                    <a href="#" class="h6 text-ellipsis-2">@article.Title</a>
+                    <a asp-controller="Articles" asp-action="Details" asp-route-id=@article.Id class="h6 text-ellipsis-2">@article.Title</a>
                     <small><i class="fa fa-eye"> @article.Views Lượt xem</i></small>
                     <small><i class="fas fa-calendar-alt">  @article.Date.ToString("dd/MM/yyyy")</i></small>
                 </div>

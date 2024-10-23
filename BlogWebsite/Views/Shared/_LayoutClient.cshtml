@@ -42,7 +42,7 @@
         <div class="container-fluid bg-light">
             <div class="container px-0">
                 <nav class="navbar navbar-light navbar-expand-xl">
-                    <a asp-controlelr="Home" asp-action="Index" class="navbar-brand mt-3 d-flex gap-3 align-items-center">
+                    <a asp-controller="Home" asp-action="Index" class="navbar-brand mt-3 d-flex gap-3 align-items-center">
                         <img src="~/img/logo_vydhdt.png" style="width: 70px; aspect-ratio: 1/1; object-fit: cover"/>
                         <p class="text-primary h2 mb-2 fw-bold" style="line-height: 20px;">VIỆN Y DƯỢC HỌC DÂN TỘC</p>
                         @* <small class="text-body fw-normal" style="letter-spacing: 5px;">Thành phố Hồ Chí Minh</small> *@
@@ -82,10 +82,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body d-flex align-items-center">
-                    <div class="input-group w-75 mx-auto d-flex">
-                        <input type="search" class="form-control p-3" placeholder="Nhập từ khóa" aria-describedby="search-icon-1">
-                        <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
-                    </div>
+                    <form asp-controller="Articles" asp-action="Search" class="input-group w-75 mx-auto d-flex">
+                         <input name="key" type="search" class="form-control p-3" placeholder="Nhập từ khóa" aria-describedby="search-icon-1">
+                        <button type="submit" id="search-icon-1" class="btn bg-primary input-group-text p-3"><i class="fa fa-search" style="color: white"></i></button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -134,35 +134,8 @@
                         <div class="d-flex flex-column mb-4">
                             <h4 class="mb-4 text-white">Bài đăng mới</h4>
                             @* post-start *@
-                            <a href="#">
-                                <div class="d-flex align-items-center mb-4">
-                                    <div class="rounded-circle border border-2 border-primary overflow-hidden">
-                                        <img src="img/footer-1.jpg" class="img-zoomin img-fluid rounded-circle w-100" alt="">
-                                    </div>
-                                    <div class="d-flex flex-column ps-4">
-                                        <p class="text-uppercase text-white mb-3">Life Style</p>
-                                        <p href="#" class="h6 text-white">
-                                            Get the best speak market, news.
-                                        </p>
-                                        <small class="text-white d-block"><i class="fas fa-calendar-alt me-1"></i> Dec 9, 2024</small>
-                                    </div>
-                                </div>
-                            </a>
+                            @await Component.InvokeAsync("FooterArticles")
                             @* post-end *@
-                            <a href="#">
-                                <div class="d-flex align-items-center">
-                                    <div class="rounded-circle border border-2 border-primary overflow-hidden">
-                                        <img src="img/footer-2.jpg" class="img-zoominimg-fluid rounded-circle w-100" alt="">
-                                    </div>
-                                    <div class="d-flex flex-column ps-4">
-                                        <p class="text-uppercase text-white mb-3">Sports</p>
-                                        <p href="#" class="h6 text-white">
-                                            Get the best speak market, news.
-                                        </p>
-                                        <small class="text-white d-block"><i class="fas fa-calendar-alt me-1"></i> Dec 9, 2024</small>
-                                    </div>
-                                </div>
-                            </a>
                         </div>
                         <div class="d-flex flex-column">
                         </div>

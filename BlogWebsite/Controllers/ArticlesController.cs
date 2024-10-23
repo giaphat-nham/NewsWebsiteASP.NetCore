@@ -4,8 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using NewsWebsite.Models;
+using X.PagedList.Extensions;
+using System.Globalization;
+using System.Text;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace NewsWebsite.Controllers
 {
@@ -26,7 +32,7 @@ namespace NewsWebsite.Controllers
         }
 
         //GET: Articles/Articles/{id}
-        public async Task<IActionResult> Articles(int? id)
+        public async Task<IActionResult> Articles(int? id, int? page)
         {
             if (id == null)
             {
@@ -40,10 +46,15 @@ namespace NewsWebsite.Controllers
                 return NotFound();
             }
 
+            var pageNumber = page ?? 1;
+            var pageSize = 6;
+
+            ViewBag.ArticlePage = articles.ToPagedList(pageNumber, pageSize);
+
             return View(articles);
         }
 
-        public async Task<IActionResult> Trending()
+        public async Task<IActionResult> Trending(int? page)
         {
             var articles = await _context.Articles.Include(a => a.Account).Include(a => a.Category).Where(a => a.IsDeleted == false && a.Published == true).OrderByDescending(a => a.Views).ToListAsync();
 
@@ -51,6 +62,11 @@ namespace NewsWebsite.Controllers
             {
                 return NotFound();
             }
+
+            var pageNumber = page ?? 1;
+            var pageSize = 6;
+
+            ViewBag.ArticlePage = articles.ToPagedList(pageNumber, pageSize);
 
             return View(articles);
         }
@@ -80,6 +96,43 @@ namespace NewsWebsite.Controllers
             await _context.SaveChangesAsync();
 
             return View(article);
+        }
+
+        public static string RemoveAccents(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return input;
+
+            var normalizedString = input.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
+
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+        }
+
+        public async Task<IActionResult> Search(string key, int? page)
+        {
+            var articles = await _context.Articles.Where(a => a.IsDeleted == false && a.Published == true).ToListAsync();
+
+            var searchResult = articles.Select(a => new { Article = a, ProcessedTitle = RemoveAccents(a.Title)}).Where(result => result.ProcessedTitle.Contains(RemoveAccents(key),StringComparison.OrdinalIgnoreCase)).Select(result => result.Article).ToList();
+
+            if (searchResult != null)
+            {
+
+            var pageNumber = page ?? 1;
+            var pageSize = 6;
+
+            ViewBag.ArticlePage = searchResult.ToPagedList(pageNumber, pageSize);
+            }
+            return View("Search",key);
         }
 
         // GET: Articles/Create

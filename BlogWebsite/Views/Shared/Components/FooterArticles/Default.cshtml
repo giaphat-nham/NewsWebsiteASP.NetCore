@@ -1,0 +1,16 @@
+﻿@model IEnumerable<NewsWebsite.ViewModels.ArticleSidebarVM>
+
+@foreach(var article in Model)
+{
+    <a asp-controller="Articles" asp-action="Details" asp-route-id=@article.Id>
+        <div class="d-flex align-items-center mb-4">
+            <div class="d-flex flex-column ps-4">
+                <p class="text-uppercase text-white mb-3 text-ellipsis-1">@article.CategoryName</p>
+                <p class="h6 text-white text-ellipsis-2">
+                    @article.Title
+                </p>
+                <small class="text-white d-block"><i class="fas fa-calendar-alt me-1"></i> @article.Date.ToString("dd/MM/yyyy")</small>
+            </div>
+        </div>
+    </a>
+}

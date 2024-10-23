@@ -16,7 +16,7 @@
     <div class="container py-5">
         <ol class="breadcrumb justify-content-start mb-4">
             <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
-            <li class="breadcrumb-item"><a href="#">Thông tin về viện</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Articles" asp-action="Articles" asp-route-id=@Model.CategoryId>Thông tin về viện</a></li>
             <li class="breadcrumb-item active text-dark text-ellipsis-1">@Model.Title</li>
         </ol>
         <div class="row g-4">
@@ -73,10 +73,10 @@
                 <div class="row g-4">
                     <div class="col-12">
                         <div class="p-3 rounded border">
-                            <div class="input-group w-100 mx-auto d-flex mb-4">
-                                <input type="search" class="form-control p-3" placeholder="Nhập từ khóa" aria-describedby="search-icon-1">
-                                <span id="search-icon-1" class="btn btn-primary input-group-text p-3"><i class="fa fa-search text-white"></i></span>
-                            </div>
+                            <form asp-controller="Articles" asp-action="Search" class="input-group w-100 mx-auto d-flex mb-4">
+                                <input name="key" type="search" class="form-control p-3" placeholder="Nhập từ khóa" aria-describedby="search-icon-1">
+                                <button type="submit" id="search-icon-1" class="btn btn-primary input-group-text p-3" style="border-radius: 0 10px 10px 0"><i class="fa fa-search text-white"></i></button>
+                            </form>
                             <h4 class="mb-4">Danh mục khác</h4>
                             <div class="row g-2">
                                 @await Component.InvokeAsync("CategoryList")
