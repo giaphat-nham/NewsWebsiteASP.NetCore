@@ -1,0 +1,29 @@
+﻿@model IEnumerable<NewsWebsite.ViewModels.DisplayArticleVM>
+
+@foreach (var article in Model)
+{
+    <div class="col-lg-4">
+        <div class="card overflow-hidden hover-img">
+            <div class="position-relative">
+                <a target="_blank" asp-action="ViewArticle" asp-controller="Articles" asp-route-id=@article.Id>
+                    <img src="~/img/articles/@article.Thumbnail" class="card-img-top" alt="matdash-img" style="aspect-ratio: 3 / 2; object-fit: cover">
+                </a>
+            </div>
+            <div class="card-body p-4">
+                <span class="badge text-bg-light fs-2 py-1 px-2 lh-sm">@article.Category</span>
+                <a target="_blank" class="d-block my-4 fs-5 text-dark fw-semibold link-primary text-ellipsis-3" asp-action="ViewArticle" asp-controller="Articles" asp-route-id=@article.Id>
+                    @article.Title
+                </a>
+                <div class="d-flex align-items-center gap-4">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="ti ti-eye text-dark fs-5"></i>@article.Views
+                    </div>
+
+                    <div class="d-flex align-items-center fs-2 ms-auto">
+                        <i class="ti ti-point text-dark"></i>@article.Date.ToString("dd/MM/yyyy")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

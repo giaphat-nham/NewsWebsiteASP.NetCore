@@ -1,0 +1,108 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IEnumerable<NewsWebsite.Models.Account>
+
+@{
+    ViewData["Title"] = "Quản lý tài khoản";
+    Layout = "_LayoutAdmin";
+}
+<script src="https://cdn.jsdelivr.net/npm/@@floating-ui/core@1.6.8"></script>
+<script src="https://cdn.jsdelivr.net/npm/@@floating-ui/dom@1.6.11"></script>
+
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <h5 class="card-title">Danh sách tài khoản</h5>
+                <a asp-controller="Admin" asp-action="Register" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-square-rounded-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" /><path d="M15 12h-6" /><path d="M12 9v6" /></svg>
+                    Tạo tài khoản mới
+                </a>
+            </div>
+            <div class="table-responsive">
+                <table class="table text-nowrap align-middle mb-4">
+                    <thead>
+                        <tr class="border-2 border-bottom border-primary border-0">
+                            <th scope="col" class="text-center">ID</th>
+                            <th scope="col">Tên đăng nhập</th>
+                            <th scope="col">Tên hiển thị</th>
+                            <th scope="col" class="text-center">Vai trò</th>
+                            <th scope="col" class="text-center">Trạng thái</th>
+                            <th scope="col" class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        @foreach (var account in ViewBag.AccountPage)
+                        {
+                            <tr>
+                                <th scope="row" class="text-center fw-medium">
+                                    <span class="table-link1 text-truncate d-block">
+                                        @account.Id
+                                    </span>
+                                </th>
+                                <td class="fw-medium text-truncate" style="max-width: 250px">
+                                    @account.Username
+                                </td>
+                                <td class="fw-medium">@account.DisplayName</td>
+                                <td class="text-center fw-medium">
+                                    @if (account.Role.Name == "Admin")
+                                    {
+                                        <span class="badge rounded-pill bg-primary">@account.Role.Name</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge rounded-pill bg-info">@account.Role.Name</span>
+                                    }
+                                </td>
+                                <td class="text-center fw-medium">
+                                    @if (account.IsDeleted)
+                                    {
+                                        <span class="badge rounded-pill bg-danger">Đã khóa</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge rounded-pill bg-success">Đang hoạt động</span>
+                                    }
+                                </td>
+                                <td class="d-flex align-items-center gap-2 justify-content-center">
+                                    @if (account.IsDeleted != true)
+                                    {
+                                        <a asp-controller="Accounts" asp-action="Delete" asp-route-id=@account.Id data-bs-toggle="tooltip" data-bs-placement="top" title="Khóa tài khoản">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-lock"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z" /><path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" /><path d="M8 11v-4a4 4 0 1 1 8 0v4" /></svg>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="Accounts" asp-action="Delete" asp-route-id=@account.Id data-bs-toggle="tooltip" data-bs-placement="top" title="Mở khóa tài khoản">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-lock-open-2"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" /><path d="M9 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" /><path d="M13 11v-4a4 4 0 1 1 8 0v4" /></svg>
+                                        </a>
+                                    }
+                                    <a asp-controller="Accounts" asp-action="Edit" asp-route-id=@account.Id data-bs-toggle="tooltip" data-bs-placement="top" title="Chỉnh sửa">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
+                                    </a>
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+                <div class="w-100 d-flex justify-content-center">
+                    @Html.PagedListPager((IPagedList)ViewBag.AccountPage, page => Url.Action("Index", new { page = page }), new PagedListRenderOptions
+               {
+                   LiElementClasses = new string[] { "page-item" },
+                   PageClasses = new string[] { "page-link" }
+               })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    });
+</script>

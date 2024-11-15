@@ -15,7 +15,7 @@ namespace NewsWebsite.ViewComponents
 
         public IViewComponentResult Invoke()
         {
-            var articles = db.Articles.Where(a => a.IsDeleted == false && a.Published == true).OrderByDescending(a => a.Views).Take(6).Select(a => new HomeArticleVM
+            var articles = db.Articles.Where(a => a.IsDeleted == false && a.Published == true).OrderByDescending(a => a.Views).Take(6).Select(a => new DisplayArticleVM
             {
                 Id = a.Id,
                 Title = a.Title,

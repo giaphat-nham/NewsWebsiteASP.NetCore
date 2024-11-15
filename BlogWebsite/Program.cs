@@ -1,13 +1,35 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using NewsWebsite.Helpers;
 using NewsWebsite.Models;
+using NewsWebsite.Services;
+using SweetAlert2;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<NewswebsiteContext>(options => {
+builder.Services.AddDbContext<NewswebsiteContext>(options =>
+{
     options.UseSqlServer(builder.Configuration.GetConnectionString("NEWSWEBSITE"));
 });
+
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+{
+    options.LoginPath = "/Admin";
+    options.AccessDeniedPath = "/Admin/AccessDenied";
+});
+
+builder.Services.AddSweetAlert2();
+// Bind SMTP settings from configuration
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
+
+// Register the email service
+builder.Services.AddTransient<IEmailService, EmailService>();
+
 
 var app = builder.Build();
 
@@ -24,6 +46,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

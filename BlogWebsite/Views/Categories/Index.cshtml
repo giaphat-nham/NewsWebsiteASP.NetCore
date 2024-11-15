@@ -1,41 +1,73 @@
-﻿@model IEnumerable<NewsWebsite.Models.Category>
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IEnumerable<NewsWebsite.Models.Category>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Quản lý danh mục";
+    Layout = "_LayoutAdmin";
 }
+<script src="https://cdn.jsdelivr.net/npm/@@floating-ui/core@1.6.8"></script>
+<script src="https://cdn.jsdelivr.net/npm/@@floating-ui/dom@1.6.11"></script>
 
-<h1>Index</h1>
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <h5 class="card-title">Danh sách danh mục</h5>
+                <a asp-controller="Categories" asp-action="Create" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-square-rounded-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" /><path d="M15 12h-6" /><path d="M12 9v6" /></svg>
+                    Thêm danh mục
+                </a>
+            </div>
+            <div class="table-responsive">
+                <table class="table text-nowrap align-middle mb-4">
+                    <thead>
+                        <tr class="border-2 border-bottom border-primary border-0">
+                            <th scope="col" class="text-center">ID</th>
+                            <th scope="col">Tên danh mục</th>
+                            <th scope="col" class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        @foreach (var category in ViewBag.CategoryPage)
+                        {
+                            <tr>
+                                <th scope="row" class="text-center fw-medium">
+                                    <span class="table-link1 text-truncate d-block">
+                                        @category.Id
+                                    </span>
+                                </th>
+                                <td class="fw-medium">@category.Name</td>
+                                <td class="d-flex align-items-center gap-2 justify-content-center">
+                                    <a asp-controller="Categories" asp-action="Delete" asp-route-id=@category.Id data-bs-toggle="tooltip" data-bs-placement="top" title="Xóa danh mục">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash-x"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 7h16" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /><path d="M10 12l4 4m0 -4l-4 4" /></svg>
+                                    </a>
+                                    <a asp-controller="Categories" asp-action="Edit" asp-route-id=@category.Id data-bs-toggle="tooltip" data-bs-placement="top" title="Chỉnh sửa">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
+                                    </a>
+                                </td>
+                            </tr>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsDeleted)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDeleted)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                        }
+                    </tbody>
+                </table>
+                <div class="w-100 d-flex justify-content-center">
+                    @Html.PagedListPager((IPagedList)ViewBag.CategoryPage, page => Url.Action("Index", new { page = page }), new PagedListRenderOptions
+               {
+                   LiElementClasses = new string[] { "page-item" },
+                   PageClasses = new string[] { "page-link" }
+               })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    });
+</script>

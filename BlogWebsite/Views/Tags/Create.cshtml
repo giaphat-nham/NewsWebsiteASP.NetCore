@@ -1,0 +1,41 @@
+﻿@model NewsWebsite.ViewModels.TagCreateVM
+
+@{
+    ViewData["Title"] = "Thêm thẻ";
+    Layout = "_LayoutAdmin";
+}
+
+<style>
+    ul {
+        margin-left: 1rem;
+    }
+</style>
+
+<h1>Thêm mới</h1>
+
+<h4>Thẻ</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create">
+            <div class="form-group mb-3">
+                <label asp-for="Name" class="control-label"></label><sup class="text-danger">*</sup>
+                <input asp-for="Name" class="form-control bg-white" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <input type="submit" value="Thêm thẻ" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a class="btn btn-outline-primary" asp-action="Index">Quay lại danh sách</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

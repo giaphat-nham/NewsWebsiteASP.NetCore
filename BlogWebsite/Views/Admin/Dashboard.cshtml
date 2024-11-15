@@ -1,0 +1,31 @@
+﻿@{
+    Layout = "_LayoutAdmin";
+}
+
+<div class="row">
+    <div class="col-lg-8">
+        @await Component.InvokeAsync("Chart")
+    </div>
+    <div class="col-lg-4">
+        @await Component.InvokeAsync("TagChart")
+    </div>
+    <div class="col-lg-8">
+        @await Component.InvokeAsync("AdminTopArticles")
+    </div>
+    <div class="col-lg-4">
+        @await Component.InvokeAsync("StatisticCategory")
+    </div>
+    <div class="col-lg-12">
+        <h5 class="d-flex align-items-center gap-2 mb-3 pb-3">
+            Các bài viết đã tạo gần đây
+        </h5>
+    </div>
+    @await Component.InvokeAsync("AdminRecentArticles")
+    <div class="py-6 px-6 text-center">
+        <p class="mb-0 fs-4">
+            Giao diện thiết kế bởi <a href="https://adminmart.com/" target="_blank"
+                                       class="pe-1 text-primary text-decoration-underline">AdminMart.com</a>Phân phối bởi <a href="https://themewagon.com/" target="_blank"
+                                                                                                                              class="pe-1 text-primary text-decoration-underline">ThemeWagon</a>
+        </p>
+    </div>
+</div>

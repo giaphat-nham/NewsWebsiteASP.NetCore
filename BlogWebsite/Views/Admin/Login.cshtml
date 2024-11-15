@@ -1,0 +1,59 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Đăng nhập";
+}
+
+@model NewsWebsite.ViewModels.LoginVM
+
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đăng nhập</title>
+    <link rel="icon" type="image/png" href="/img/logo_vydhdt.png">
+    <link rel="stylesheet" href="../assets/css/styles.min.css" />
+</head>
+
+<body>
+    <!--  Body Wrapper -->
+    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+         data-sidebar-position="fixed" data-header-position="fixed">
+        <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+            <div class="d-flex align-items-center justify-content-center w-100">
+                <div class="row justify-content-center w-100">
+                    <div class="col-md-8 col-lg-6 col-xxl-3">
+                        <div class="card mb-0">
+                            <div class="card-body">
+                                <div class="text-nowrap logo-img text-center d-block py-3 w-100">
+                                    <img src="~/img//logo_vydhdt.png" alt="logo" style="aspect-ratio: 1 / 1; object-fit: cover; width: 150px">
+                                </div>
+                                <p class="text-center">Viện Y Dược học dân tộc</p>
+                                <form asp-action="Index" asp-route-returnUrl="@ViewBag.ReturnUrl">
+                                    <div asp-validation-summary="All" class="text-danger"></div>
+                                    <div class="my-3">
+                                        <label asp-for="Username" class="form-label"></label>
+                                        <input asp-for="Username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                        <span asp-validation-for="Username" class="text-danger"></span>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label asp-for="Password" class="form-label"></label>
+                                        <input asp-for="Password" class="form-control" id="exampleInputPassword1">
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                    </div>
+                                    <button type="submit" class="btn btn-warning w-100 py-8 fs-4 my-4">Đăng nhập</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+</body>
+
+</html>

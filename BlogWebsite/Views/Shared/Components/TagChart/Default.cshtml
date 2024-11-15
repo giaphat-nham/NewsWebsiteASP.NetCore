@@ -1,0 +1,38 @@
+﻿@model NewsWebsite.ViewModels.TagChartVM
+
+<div class="card">
+    <div class="card-body text-center">
+        <h5 class="card-title d-flex align-items-center gap-2 mb-4">
+            Số lượng bài viết theo thẻ
+        </h5>
+        <div id="articles-by-tag">
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    var options = {
+        series: @Html.Raw(Json.Serialize(Model.ArticlesByTag)),
+        chart: {
+            type: 'donut',
+        },
+        labels: @Html.Raw(Json.Serialize(Model.TagNames)),
+        legend: {
+            position: 'bottom'
+        },
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }]
+    };
+
+    var chart = new ApexCharts(document.querySelector("#articles-by-tag"), options);
+    chart.render();
+</script>

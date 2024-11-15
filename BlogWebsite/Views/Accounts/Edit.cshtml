@@ -1,0 +1,57 @@
+﻿@model NewsWebsite.ViewModels.AccountEditVM
+
+@{
+    ViewData["Title"] = "Chỉnh sửa thông tin tài khoản";
+    Layout = "_LayoutAdmin";
+}
+
+<h1>Chỉnh sửa</h1>
+
+<h4>Tài khoản</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Password" />
+            <input type="hidden" asp-for="RandomKey" />
+            <input type="hidden" asp-for="IsDeleted" />
+            <div class="form-group mb-3">
+                <label asp-for="Username" class="control-label"></label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label for="NewPassword" class="control-label">Mật khẩu mới</label>
+                <input name="NewPassword" class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="RoleId" class="control-label"></label>
+                <select asp-for="RoleId" class="form-control" asp-items="ViewBag.RoleId"></select>
+                <span asp-validation-for="RoleId" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="DisplayName" class="control-label"></label>
+                <input asp-for="DisplayName" class="form-control" />
+                <span asp-validation-for="DisplayName" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <input type="submit" value="Lưu tài khoản" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Quay lại danh sách</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

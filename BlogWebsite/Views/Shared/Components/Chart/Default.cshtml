@@ -1,0 +1,53 @@
+﻿@model NewsWebsite.ViewModels.ChartVM
+
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title d-flex align-items-center gap-2 mb-4">
+            Thống kê lượt xem bài viết theo danh mục
+        </h5>
+        <div id="chart">
+        </div>
+    </div>
+</div>
+
+<script type="module">
+
+    var options = {
+        series: [{
+            name: 'Số lượng bài viết',
+            type: 'column',
+            data: @Html.Raw(Json.Serialize(Model.ArticlesByCategory))
+            }, {
+            name: 'Tổng số lượt xem',
+            type: 'line',
+            data: @Html.Raw(Json.Serialize(Model.ViewsByCategory))
+            }],
+        chart: {
+            height: 350,
+            type: 'line',
+        },
+        stroke: {
+            width: [0, 4]
+        },
+        dataLabels: {
+            enabled: true,
+            enabledOnSeries: [1]
+        },
+        labels: @Html.Raw(Json.Serialize(Model.CategoriesName)),
+        yaxis: [{
+            title: {
+                text: 'Số lượng bài viết',
+            },
+
+        }, {
+            opposite: true,
+            title: {
+                text: 'Tổng số lượt xem',
+            }
+        }]
+    };
+
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+</script>

@@ -1,48 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NewsWebsite.Helpers;
 using NewsWebsite.Models;
+using NewsWebsite.ViewModels;
+using X.PagedList.Extensions;
 
 namespace NewsWebsite.Controllers
 {
     public class CategoriesController : Controller
     {
         private readonly NewswebsiteContext _context;
+        private readonly IMapper _mapper;
 
-        public CategoriesController(NewswebsiteContext context)
+        public CategoriesController(NewswebsiteContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: Categories
-        public async Task<IActionResult> Index()
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Index(int? page)
         {
-            return View(await _context.Categories.ToListAsync());
-        }
+            var categories = await _context.Categories.Where(c => c.IsDeleted == false).ToListAsync();
 
-        // GET: Categories/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var pageNumber = page ?? 1;
+            var pageSize = 6;
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
+            ViewBag.CategoryPage = categories.ToPagedList(pageNumber, pageSize);
 
-            return View(category);
+            return View(categories);
         }
 
         // GET: Categories/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -52,19 +51,32 @@ namespace NewsWebsite.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,IsDeleted")] Category category)
+        public async Task<IActionResult> Create([Bind("Name")] CategoryCreateVM model)
         {
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
             if (ModelState.IsValid)
             {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    var category = _mapper.Map<CategoryCreateVM, Category>(model);
+                    category.IsDeleted = false;
+
+                    _context.Add(category);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error occured while adding a new category at [HttpPost]Create");
+                }
             }
-            return View(category);
+            return View(model);
         }
 
         // GET: Categories/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,45 +89,55 @@ namespace NewsWebsite.Controllers
             {
                 return NotFound();
             }
-            return View(category);
+            var editCategory = _mapper.Map<Category, CategoryEditVM>(category);
+            if (editCategory == null)
+            {
+                return NotFound();
+            }
+            return View(editCategory);
         }
 
         // POST: Categories/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,IsDeleted")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] CategoryEditVM model)
         {
-            if (id != category.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
-
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var category = _mapper.Map<CategoryEditVM, Category>(model);
+                    category.IsDeleted = false;
+
                     _context.Update(category);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.Id))
+                    if (!CategoryExists(model.Id))
                     {
                         return NotFound();
                     }
                     else
                     {
-                        throw;
+                        System.Diagnostics.Debug.WriteLine("Error occured while editing a category at [HttpPost]Edit");
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            return View(model);
         }
 
         // GET: Categories/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,13 +157,14 @@ namespace NewsWebsite.Controllers
 
         // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var category = await _context.Categories.FindAsync(id);
             if (category != null)
             {
-                _context.Categories.Remove(category);
+                category.IsDeleted = true;
             }
 
             await _context.SaveChangesAsync();

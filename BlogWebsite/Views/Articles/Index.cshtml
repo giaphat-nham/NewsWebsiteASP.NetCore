@@ -1,83 +1,154 @@
-﻿@model IEnumerable<NewsWebsite.Models.Article>
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IEnumerable<NewsWebsite.Models.Article>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Quản lý bài viết";
+    Layout = "_LayoutAdmin";
 }
+<script src="https://cdn.jsdelivr.net/npm/@@floating-ui/core@1.6.8"></script>
+<script src="https://cdn.jsdelivr.net/npm/@@floating-ui/dom@1.6.11"></script>
 
-<h1>Index</h1>
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <h5 class="card-title">Danh sách bài viết</h5>
+                <div class="d-flex gap-3 align-items-center">
+                    <div class="form-group">
+                        <input name="key" id="search" type="search" class="form-control" placeholder="Tìm kiếm" aria-describedby="search-icon-1">
+                    </div>
+                    <a href="#" role="button" class="link-primary text-muted" id="date-asc">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-up"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12.5 21h-6.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v5" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M19 22v-6" /><path d="M22 19l-3 -3l-3 3" /></svg>
+                    </a>
+                    <a href="#" role="button" class="link-primary text-muted" id="date-desc">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-down"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12.5 21h-6.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v5" /><path d="M19 16v6" /><path d="M22 19l-3 3l-3 -3" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /></svg>
+                    </a>
+                    <a asp-controller="Articles" asp-action="Create" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-square-rounded-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" /><path d="M15 12h-6" /><path d="M12 9v6" /></svg>
+                        Thêm bài viết
+                    </a>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table text-nowrap align-middle mb-4">
+                    <thead>
+                        <tr class="border-2 border-bottom border-primary border-0">
+                            <th scope="col" class="text-center">ID</th>
+                            <th scope="col">Tiêu đề</th>
+                            <th scope="col" class="text-center">Ngày đăng bài</th>
+                            <th scope="col" class="text-center">Lượt xem</th>
+                            <th scope="col" class="text-center">Trạng thái</th>
+                            <th scope="col" class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="article-list" class="table-group-divider">
+                        @foreach (var article in ViewBag.ArticlePage)
+                        {
+                            <tr>
+                                <th scope="row" class="text-center fw-medium">
+                                    <span class="table-link1 text-truncate d-block">
+                                        @article.Id
+                                    </span>
+                                </th>
+                                <td style="max-width: 250px">
+                                    <a asp-controller="Articles" asp-action="Details" asp-route-id=@article.Id target="_blank" class="link-primary text-dark fw-medium d-block text-truncate">@article.Title</a>
+                                </td>
+                                <td class="fw-medium text-center">@article.Date.ToString("dd/MM/yyyy")</td>
+                                <td class="text-center fw-medium">@article.Views</td>
+                                <td class="text-center fw-medium">
+                                    @if (article.Published)
+                                    {
+                                        <span class="badge rounded-pill bg-success">Đã phát hành</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge rounded-pill bg-danger">Chưa phát hành</span>
+                                    }
+                                </td>
+                                <td class="d-flex align-items-center gap-2 justify-content-center">
+                                    <a asp-controller="Articles" asp-action="ViewArticle" asp-route-id=@article.Id data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Xem chi tiết">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
+                                    </a>
+                                    <a asp-controller="Articles" asp-action="Delete" asp-route-id=@article.Id data-bs-toggle="tooltip" data-bs-placement="top" title="Xóa bài viết">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash-x"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 7h16" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /><path d="M10 12l4 4m0 -4l-4 4" /></svg>
+                                    </a>
+                                    <a asp-controller="Articles" asp-action="Edit" asp-route-id=@article.Id data-bs-toggle="tooltip" data-bs-placement="top" title="Chỉnh sửa">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
+                                    </a>
+                                </td>
+                            </tr>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Htext)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Views)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Thumbnail)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Published)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Account)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Htext)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Views)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Thumbnail)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Published)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Account.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+                        }
+                    </tbody>
+                </table>
+                <div id="pagination-links" class="w-100 d-flex justify-content-center">
+                    @Html.PagedListPager((IPagedList)ViewBag.ArticlePage, page => Url.Action("Index", new { page = page }), new PagedListRenderOptions
+               {
+                   LiElementClasses = new string[] { "page-item" },
+                   PageClasses = new string[] { "page-link" },
+                   DisplayLinkToFirstPage = PagedListDisplayMode.Never,
+                   DisplayLinkToLastPage = PagedListDisplayMode.Never,
+                   DisplayLinkToPreviousPage = PagedListDisplayMode.Never,
+                   DisplayLinkToNextPage = PagedListDisplayMode.Never
+               })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    });
+</script>
+
+@section Scripts {
+    <script>
+        (function () {
+            // Function to update the article list with AJAX
+            function updateArticles(page = 1, sort = "asc") {
+                const searchTerm = $('#search').val();
+
+                $.ajax({
+                    url: '@Url.Action("Index", "Articles")',
+                    type: 'GET',
+                    data: { page: page, key: searchTerm, sort: sort },
+                    success: function (response) {
+                        // Replace current HTML with the new HTML content
+                        $('#article-list').html($(response).find('#article-list').html());
+                        $('#pagination-links').html($(response).find('#pagination-links').html());
+                    },
+                    error: function () {
+                        alert("An error occurred while searching.");
+                    }
+                });
+            }
+
+            // Search input event to trigger real-time search
+            $('#search').on('input', function () {
+                updateArticles();
+            });
+
+            // Handle sort clicks
+            $(document).on('click', '#date-asc', function (e) {
+                updateArticles(1, "asc");
+            });
+
+            $(document).on('click', '#date-desc', function (e) {
+                updateArticles(1, "desc");
+            });
+
+            // Handle pagination link clicks
+            $(document).on('click', '.page-link', function (e) {
+                e.preventDefault();
+                const page = +$(this).html();
+                updateArticles(page);
+            });
+        })();
+    </script>
 }
-    </tbody>
-</table>

@@ -6,7 +6,7 @@
 
 <div class="position-relative overflow-hidden rounded">
     <a asp-controller="Articles" asp-action="Details" asp-route-id=@Model.Id>
-    <img src="~/img/@Model.Thumbnail" class="img-fluid rounded img-zoomin w-100" alt="" style="aspect-ratio: 5 / 4; object-fit: cover">
+    <img src="~/img/articles/@Model.Thumbnail" class="img-fluid rounded img-zoomin w-100" alt="" style="aspect-ratio: 5 / 4; object-fit: cover">
     <div class="d-flex justify-content-center px-4 position-absolute flex-wrap" style="bottom: 10px; left: 0;">
         <div class="text-white me-3 link-hover"><i class="fa fa-eye"></i> @Model.Views Lượt xem</div>
         <div class="text-white me-3 link-hover"><i class="fas fa-at"></i> @Model.Account.DisplayName</div>

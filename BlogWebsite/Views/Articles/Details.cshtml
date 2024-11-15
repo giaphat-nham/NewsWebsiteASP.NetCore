@@ -30,11 +30,13 @@
                         @Model.Category.Name
                     </div>
                 </div>
-                <div class="d-flex justify-content-start gap-2">
+                <div class="d-flex justify-content-start gap-2 mb-4">
                     <div class="text-dark me-3"><i class="fa fa-eye"></i> @Model.Views Lượt xem</div>
                     <div class="text-dark me-3"><i class="fas fa-at"></i> @Model.Account.DisplayName</div>
                     <div class="text-dark me-3"><i class="fas fa-calendar-alt"></i> @Model.Date.ToString("dd/MM/yyyy")</div>
                 </div>
+                <p class="my-3 text-justify">@Model.Description</p>
+                <hr />
                 @Html.Raw(Model.Htext)
                 <div class="tab-class">
                     <div class="d-flex justify-content-between border-bottom my-4 pb-3 align-items-center">
@@ -66,6 +68,27 @@
                     <div class="row g-4">
                         @await Component.InvokeAsync("RecommendedArticles",Model.CategoryId)
                     </div>
+                </div>
+                <div class="bg-light rounded p-4 my-4">
+                    <h4 class="mb-4">Chia sẻ nhận xét</h4>
+                    <form asp-action="Comment">
+                        <input type="hidden" name="ArticleId" value=@Model.Id />
+                        <input type="hidden" name="Title" value="@Html.Raw(Model.Title)" />
+                        <div class="row g-4">
+                            <div class="col-lg-6">
+                                <input type="text" class="form-control py-3" placeholder="Họ và tên" name="FullName">
+                            </div>
+                            <div class="col-lg-6">
+                                <input type="email" class="form-control py-3" placeholder="Địa chỉ email" name="Email">
+                            </div>
+                            <div class="col-12">
+                                <textarea class="form-control" name="Comment" id="" cols="30" rows="7" placeholder="Viết nhận xét tại đây"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button class="form-control btn btn-primary py-3" type="submit">Gửi</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
 
             </div>

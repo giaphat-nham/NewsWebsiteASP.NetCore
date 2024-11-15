@@ -1,0 +1,55 @@
+﻿@model IEnumerable<NewsWebsite.ViewModels.StatisticCategoryVM>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title d-flex align-items-center gap-2 mb-3 pb-3">
+            Tỉ lệ số bài viết theo danh mục
+        </h5>
+        <div class="row">
+            @foreach (var category in Model)
+            {
+                <div class="col-6">
+                    @if(category.Id % 3 == 0)
+                    {
+                        <iconify-icon icon="icon-park-twotone:category-management" class="fs-7 d-flex text-success"></iconify-icon>
+                    }
+                    else if (category.Id % 2 == 0)
+                    {
+                        <iconify-icon icon="icon-park-twotone:category-management" class="fs-7 d-flex text-secondary"></iconify-icon>
+                    }
+                    else {
+                        <iconify-icon icon="icon-park-twotone:category-management" class="fs-7 d-flex text-primary"></iconify-icon>
+                    }
+                    <span class="fs-11 mt-2 d-block text-nowrap text-truncate">@category.Name</span>
+                    <h4 class="mb-0 mt-1">@category.Percentage.ToString("F1")%</h4>
+                </div>
+            }
+        </div>
+
+        <div class="vstack gap-4 mt-7 pt-2">
+            @foreach (var category in Model)
+            {
+                <div>
+                    <div class="hstack justify-content-between">
+                        <span class="fs-3 fw-medium">@category.Name</span>
+                        <h6 class="fs-3 fw-medium text-dark lh-base mb-0">@category.Percentage.ToString("F1")%</h6>
+                    </div>
+                    <div class="progress mt-6" role="progressbar" aria-label="Warning example" aria-valuenow="@category.Percentage" aria-valuemin="0" aria-valuemax="100">
+                        @if (category.Id % 3 == 0)
+                        {
+                            <div class="progress-bar bg-success" style="width: @category.Percentage%"></div>
+                        }
+                        else if (category.Id % 2 == 0)
+                        {
+                            <div class="progress-bar bg-secondary" style="width: @category.Percentage%"></div>
+                        }
+                        else
+                        {
+                            <div class="progress-bar bg-primary" style="width: @category.Percentage%"></div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

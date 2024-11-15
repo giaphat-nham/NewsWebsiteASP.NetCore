@@ -1,0 +1,38 @@
+﻿@model IEnumerable<NewsWebsite.ViewModels.DisplayArticleShortenVM>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Bài viết có nhiều lượt xem nhất</h5>
+        <div class="table-responsive">
+            <table class="table text-nowrap align-middle mb-0">
+                <thead>
+                    <tr class="border-2 border-bottom border-primary border-0">
+                        <th scope="col" class="ps-0">Tiêu đề</th>
+                        <th scope="col" class="text-center">Liên kết</th>
+                        <th scope="col">Ngày đăng</th>
+                        <th scope="col" class="text-center">Lượt xem</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    @foreach (var article in Model)
+                    {
+                        <tr>
+                            <th scope="row" class="ps-0 fw-medium" style="max-width: 150px">
+                                <span class="text-truncate d-block">
+                                    @article.Title
+                                </span>
+                            </th>
+                            <td>
+                                <a asp-controller="Articles" asp-action="Details" asp-route-id=@article.Id target="_blank" class="link-primary text-dark text-center fw-medium d-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-link"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9 15l6 -6" /><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" /><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463" /></svg>
+                                </a>
+                            </td>
+                            <td class="fw-medium">@article.Date.ToString("dd/MM/yyyy")</td>
+                            <td class="text-center fw-medium">@article.Views</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

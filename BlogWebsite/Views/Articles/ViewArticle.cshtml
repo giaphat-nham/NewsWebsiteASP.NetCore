@@ -1,0 +1,102 @@
+﻿@{
+    ViewData["Title"] = "Xem chi tiết bài viết";
+    Layout = "_LayoutAdmin";
+}
+
+@model NewsWebsite.Models.Article
+
+<h1>Xem chi tiết</h1>
+
+<div class="d-flex justify-content-between">
+    <h4>Bài viết</h4>
+    <form asp-action="Print" method="post">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Title" />
+        <input type="hidden" asp-for="Description" />
+        <input type="hidden" asp-for="Thumbnail" />
+        <input type="hidden" asp-for="Htext" />
+        <input type="hidden" asp-for="Date" />
+        <input type="hidden" name="author" value="@Model.Account.DisplayName"/>
+        <button class="btn btn-info" type="submit">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-printer"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2" /><path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4" /><path d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z" /></svg>
+            In bài viết
+        </button>
+    </form>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <img src="~/img/articles/@Model.Thumbnail" class="card-img-top" alt="Article thumbnail">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-1 text-muted">@Model.Category.Name</h6>
+                <h5 class="card-title">@Model.Title</h5>
+                <p class="card-text text-justify">
+                    @Model.Description
+                </p>
+                <hr />
+                <p class="card-text">
+                    @Html.Raw(Model.Htext)
+                </p>
+                <div class="d-flex justify-content-start gap-3">
+                    <div class="text-dark"><i class="fa fa-eye"></i> @Model.Views Lượt xem</div>
+                    <div class="text-dark"><i class="fas fa-at"></i> @Model.Account.DisplayName</div>
+                    <div class="text-dark"><i class="fas fa-calendar-alt"></i> @Model.Date.ToString("dd/MM/yyyy")</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Thông tin bài viết</h5>
+                <table class="table align-middle mb-4" style="max-width: 100%">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Mã bài viết</th>
+                            <td>@Model.Id</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Tác giả</th>
+                            <td>@Model.Account.DisplayName</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Ngày đăng bài</th>
+                            <td>@Model.Date.ToString("dd/MM/yyyy")</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Lượt xem</th>
+                            <td>@Model.Views</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Trạng thái</th>
+                            <td>
+                                @if (Model.Published)
+                                {
+                                    <span class="badge rounded-pill bg-success">Đã phát hành</span>
+                                }
+                                else
+                                {
+                                    <span class="badge rounded-pill bg-danger">Chưa phát hành</span>
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-end w-100">
+                    <a asp-controller="Articles" asp-action="Edit" asp-route-id=@Model.Id class="btn btn-primary">Chỉnh sửa bài viết</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Quay lại danh sách</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

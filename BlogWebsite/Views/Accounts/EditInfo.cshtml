@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["title"] = "Thông tin cá nhân";
+    Layout = "_LayoutAdmin";
+}
+
+@model NewsWebsite.ViewModels.AccountEditInfoVM;
+
+<h1>Thông tin tài khoản</h1>
+
+<div>
+    <hr />
+
+    <div class="col-md-8">
+        <div class="card">
+            <form asp-action="EditInfo">
+                <div class="card-body">
+                    <h5 class="card-title">Thông tin tài khoản</h5>
+                    <table class="table align-middle mb-4" style="max-width: 100%">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Tên tài khoản</th>
+                                <td>@Model.Username</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Tên hiển thị</th>
+                                <td>
+                                    <input class="form-control" asp-for="DisplayName" />
+                                    <span asp-validation-for="DisplayName" class="text-danger"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Email</th>
+                                <td>
+                                    <input class="form-control" asp-for="Email" />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Vai trò</th>
+                                <td>
+                                    @if (Model.Role == "Admin")
+                                    {
+                                        <span class="badge rounded-pill bg-primary">@Model.Role</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge rounded-pill bg-info">@Model.Role</span>
+                                    }
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="d-flex gap-3 p-3 px-4">
+                    <input type="submit" class="btn btn-outline-primary" value="Lưu" />
+                    <a class="btn btn-outline-primary" asp-controller="Accounts" asp-action="Personal">Quay lại</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
